@@ -1,10 +1,5 @@
-require "test/unit"
-require 'turn'
 require "stringio"
 require "json"
-require "pry"
-
-require "elster"
 
 class StreamerTest < MiniTest::Unit::TestCase
   attr_reader :output, :json

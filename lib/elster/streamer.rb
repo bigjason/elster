@@ -1,4 +1,3 @@
-require "stringio"
 require "multi_json"
 
 module Elster

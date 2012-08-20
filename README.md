@@ -18,17 +18,19 @@ Or install it yourself as:
 
 ## Usage
 
-    output = StringIO.new
-    json = Elster::Streamer.new(output)
-    json.key(:name, "George")
-    json.key(:kids) do
-      json.add("Job")
-      json.add("Buster")
-    end
-    json.close
+``` ruby
+output = StringIO.new
+json = Elster::Streamer.new(output)
+json.key(:name, "George")
+json.key(:kids) do
+  json.add("Job")
+  json.add("Buster")
+end
+json.close
 
-    puts output.string
-    # {"name":"George","kids":["Job","Buster"]}
+puts output.string
+# {"name":"George","kids":["Job","Buster"]}
+```
 
 ## Contributing
 

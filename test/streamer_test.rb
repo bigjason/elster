@@ -130,4 +130,18 @@ class StreamerTest < MiniTest::Unit::TestCase
 
     assert_equal "I am \nmulti\nlined", parsed["description"]
   end
+
+  def test_boolean_true
+    json.key("works", true)
+    json.close
+
+    assert_equal true, parsed["works"]
+  end
+
+  def test_boolean_false
+    json.key("no_works", false)
+    json.close
+
+    assert_equal false, parsed["no_works"]
+  end
 end

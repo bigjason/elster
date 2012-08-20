@@ -17,7 +17,7 @@ end
 desc "Run a simple benchmark"
 task :benchmark do
   require "stringio"
-  ITERATIONS = 100000
+  ITERATIONS = 50000
 
   Benchmark.bm do |x|
     x.report("Elster  ") do
@@ -26,6 +26,7 @@ task :benchmark do
         result.key("name_#{i}", "Jason #{i}")
         result.key("age_#{i}", i)
         result.key("nil_#{i}", nil)
+        result.key("boolean_#{i}", (i % 2) == 1)
       end
       result.close
     end
@@ -36,6 +37,7 @@ task :benchmark do
         result["name_#{i}"] = "Jason #{i}"
         result["age_#{i}"] = i
         result["nil_#{i}"] = nil
+        result["boolean_#{i}"] = (i % 2) == 1
       end
       MultiJson.dump(result)
     end

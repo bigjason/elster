@@ -2,6 +2,7 @@ require "test/unit"
 require 'turn'
 require "stringio"
 require "json"
+require "pry"
 
 require "elster"
 
@@ -57,5 +58,60 @@ class StreamerTest < MiniTest::Unit::TestCase
     json.close
 
     assert_equal ["Hooper"], parsed
+  end
+
+  def test_nested_object
+    json.key(:person) do
+      json.key(:name, "Bobert")
+      json.key(:age, 55)
+    end
+    json.close
+
+    assert_equal "Bobert", parsed["person"]["name"]
+  end
+
+  def test_deep_nested_object
+    json.key(:person) do
+      json.key(:name) do
+        json.key(:first, "Bobert")
+      end
+    end
+    json.close
+
+    assert_equal "Bobert", parsed["person"]["name"]["first"]
+  end
+
+  def test_nested_array_in_object
+    json.key(:children) do
+      json.add(1)
+      json.add(2)
+    end
+    json.close
+
+    assert_equal [1,2], parsed["children"]
+  end
+
+  def test_nested_object_in_array
+    json.add do
+      json.key(:child) do
+        json.key(:name, "Bobertson")
+      end
+    end
+    json.close
+
+    assert_equal "Bobertson", parsed[0]["child"]["name"]
+  end
+
+  def tested_array_nested_object
+    json.add do
+      json.key(:name, "Bobert")
+    end
+    json.add do
+      json.key(:age, 44)
+    end
+    json.close
+
+    assert_equal "Bobert", parsed[0]["name"]
+    assert_equal 44, parsed[1]["age"]
   end
 end

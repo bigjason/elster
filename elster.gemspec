@@ -18,4 +18,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency "multi_json"
   gem.add_development_dependency "minitest"
   gem.add_development_dependency "turn"
+  gem.add_development_dependency "pry"
 end

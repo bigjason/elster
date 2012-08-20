@@ -2,6 +2,7 @@ require "multi_json"
 
 module Elster
   class Streamer
+    attr_reader :output
     # Create a new instance of Streamer with the specified output stream. The
     # `output` must respond to `write`.
     def initialize(output)
@@ -105,11 +106,36 @@ module Elster
     end
 
     def encode_value(value)
+      case value
+      when Numeric
+        encode_number(value)
+      when String
+        encode_string(value)
+      when nil
+        encode_nil(value)
+      else
+        MultiJson.dump(value)
+      end
+    end
+
+    def encode_generic(value)
       MultiJson.dump(value)
     end
 
     def encode_string(value)
-      encode_value(value.to_s)
+      if /\A[\w\d \t]+\Z/ =~ value
+        "\"#{value}\""
+      else
+        encode_generic(value.to_s)
+      end
+    end
+
+    def encode_number(value)
+      value.to_s
+    end
+
+    def encode_nil(value)
+      "null"
     end
 
     def nest_in

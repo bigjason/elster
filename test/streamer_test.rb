@@ -97,7 +97,7 @@ class StreamerTest < MiniTest::Unit::TestCase
     assert_equal "Bobertson", parsed[0]["child"]["name"]
   end
 
-  def tested_array_nested_object
+  def test_array_nested_object
     json.add do
       json.key(:name, "Bobert")
     end
@@ -108,5 +108,26 @@ class StreamerTest < MiniTest::Unit::TestCase
 
     assert_equal "Bobert", parsed[0]["name"]
     assert_equal 44, parsed[1]["age"]
+  end
+
+  def test_ruby_hash
+    json.key("name", {:first => "Bobert"})
+    json.close
+
+    assert_equal "Bobert", parsed["name"]["first"]
+  end
+
+  def test_ruby_array
+    json.key("an_array", [1, 2])
+    json.close
+
+    assert_equal [1, 2], parsed["an_array"]
+  end
+
+  def test_string_with_cr
+    json.key("description", "I am \nmulti\nlined")
+    json.close
+
+    assert_equal "I am \nmulti\nlined", parsed["description"]
   end
 end

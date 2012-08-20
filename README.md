@@ -1,6 +1,6 @@
 # Elster
 
-TODO: Write a gem description
+A simple streaming JSON encoder.
 
 ## Installation
 

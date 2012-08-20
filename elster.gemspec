@@ -4,7 +4,6 @@ require File.expand_path("../lib/elster/version", __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Jason Webb"]
   gem.email         = ["bigjasonwebb@gmail.com"]
-  gem.description   = %q{A simple streaming JSON encoder.}
   gem.summary       = %q{A simple streaming JSON encoder.}
   gem.homepage      = ""
 

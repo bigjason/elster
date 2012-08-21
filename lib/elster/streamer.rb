@@ -127,8 +127,9 @@ module Elster
       MultiJson.dump(value)
     end
 
+    SAFE_RE = Regexp.new("\\A[#{Regexp.escape((32..126).select{|c| c != 34}.map{|c| c.chr}.join)}]+\\z")
     def encode_string(value)
-      if value =~ /\A[\w\d \t]+\Z/
+      if value =~ SAFE_RE
         "\"#{value}\""
       else
         encode_generic(value.to_s)

@@ -124,6 +124,13 @@ class StreamerTest < MiniTest::Unit::TestCase
     assert_equal [1, 2], parsed["an_array"]
   end
 
+  def test_string_with_cr_at_end
+    json.key("description", "I am \n")
+    json.close
+
+    assert_equal "I am \n", parsed["description"]
+  end
+
   def test_string_with_cr
     json.key("description", "I am \nmulti\nlined")
     json.close

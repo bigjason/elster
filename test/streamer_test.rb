@@ -110,11 +110,43 @@ class StreamerTest < MiniTest::Unit::TestCase
     assert_equal 44, parsed[1]["age"]
   end
 
+  def test_array_nested_array
+    json.add("99")
+    json.add do
+      json.add(1)
+      json.add(2)
+    end
+    json.add(99)
+    json.close
+
+    assert_equal "99", parsed[0]
+    assert_equal [1, 2], parsed[1]
+    assert_equal 99, parsed[2]
+  end
+
+  def test_array_of_nils
+    json.add
+    json.add
+    json.add(nil)
+    json.close
+
+    assert_equal [nil, nil, nil], parsed
+  end
+
+  def test_object_of_nils
+    json.key(:name)
+    json.key(:age)
+    json.close
+
+    assert_equal({"name" => nil, "age" => nil}, parsed)
+  end
+
   def test_ruby_hash
-    json.key("name", {:first => "Bobert"})
+    json.key("name", {:first => "Bobert", :age => 99})
     json.close
 
     assert_equal "Bobert", parsed["name"]["first"]
+    assert_equal 99, parsed["name"]["age"]
   end
 
   def test_ruby_array
@@ -124,18 +156,18 @@ class StreamerTest < MiniTest::Unit::TestCase
     assert_equal [1, 2], parsed["an_array"]
   end
 
-  def test_string_with_cr_at_end
-    json.key("description", "I am \n")
-    json.close
-
-    assert_equal "I am \n", parsed["description"]
-  end
-
   def test_string_with_cr
     json.key("description", "I am \nmulti\nlined")
     json.close
 
     assert_equal "I am \nmulti\nlined", parsed["description"]
+  end
+
+  def test_string_with_cr_at_end
+    json.key("description", "I am \n")
+    json.close
+
+    assert_equal "I am \n", parsed["description"]
   end
 
   def test_boolean_true
@@ -150,5 +182,27 @@ class StreamerTest < MiniTest::Unit::TestCase
     json.close
 
     assert_equal false, parsed["no_works"]
+  end
+
+  def test_encode_basic_chars
+    expected = " !\#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+    json.key("chars", expected)
+    json.close
+
+    assert_equal expected, parsed["chars"]
+  end
+
+  def test_no_key_in_arrays
+    json.add(1)
+    assert_raises(Elster::JsonContainerTypeError) do
+      json.key("DoesntMatter", "Nothing Written")
+    end
+  end
+
+  def test_no_add_in_objects
+    json.key("DoesntMatter", "Nothing will be written")
+    assert_raises(Elster::JsonContainerTypeError) do
+      json.add(1)
+    end
   end
 end

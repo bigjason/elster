@@ -1,6 +1,6 @@
 # Elster
 
-A simple streaming JSON encoder.
+Elster is a streaming JSON encoder written in pure ruby.
 
 ## Installation
 

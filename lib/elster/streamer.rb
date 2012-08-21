@@ -44,6 +44,10 @@ module Elster
     #
     #   { "mistake" : [ "HUGE!" ] }
     def key(key, value=nil, &block)
+      if @current_type == :array
+        raise JsonContainerTypeError, "Attempted to write an object `key` value inside a JSON array."
+      end
+
       if @item_count > 0
         write ","
       else
@@ -82,6 +86,10 @@ module Elster
     #
     #   [ 1, { "name" : "Wiggens" } ]
     def add(value=nil, &block)
+      if @current_type == :object
+        raise JsonContainerTypeError, "Attempted to add an array value inside a JSON object."
+      end
+
       if @item_count > 0
         write ","
       else
@@ -119,7 +127,7 @@ module Elster
       when nil
         encode_nil(value)
       else
-        MultiJson.dump(value)
+        encode_generic(value)
       end
     end
 
@@ -127,7 +135,7 @@ module Elster
       MultiJson.dump(value)
     end
 
-    SAFE_RE = Regexp.new("\\A[#{Regexp.escape((32..126).select{|c| c != 34}.map{|c| c.chr}.join)}]+\\z")
+    SAFE_RE = Regexp.new("\\A[#{Regexp.escape((32..126).select{|c| ![34, 92].include?(c)}.map{|c| c.chr}.join)}]+\\z")
     def encode_string(value)
       if value =~ SAFE_RE
         "\"#{value}\""

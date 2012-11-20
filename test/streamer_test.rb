@@ -248,6 +248,6 @@ class StreamerTest < MiniTest::Unit::TestCase
 
     assert_equal nil, parsed.fetch("empty")
     assert_equal 1, parsed.fetch("value")
-    assert_equal false, parsed["first_value"]
+    assert_equal false, parsed.fetch("first_value")
   end
 end

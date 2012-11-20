@@ -205,4 +205,49 @@ class StreamerTest < MiniTest::Unit::TestCase
       json.add(1)
     end
   end
+
+  def test_valid_when_block_exception
+    begin
+      json.key "person" do
+        json.add "A value"
+        raise "An error"
+      end
+    rescue
+      # Nothing to do
+    end
+    json.key "people", 11
+    json.close
+
+    assert_equal 11, parsed["people"]
+  end
+
+  def test_valid_when_block_writes_nothing
+    json.key :empty do
+    end
+    json.close
+
+    assert_equal nil, parsed.fetch("empty")
+  end
+
+  def test_valid_when_block_writes_nothing_multiple_values
+    json.key :empty do
+    end
+    json.key :value, 1
+    json.close
+
+    assert_equal nil, parsed.fetch("empty")
+    assert_equal 1, parsed.fetch("value")
+  end
+
+  def test_valid_when_block_writes_nothing_multi_values_before_and_after
+    json.key :first_value, false
+    json.key :empty do
+    end
+    json.key :value, 1
+    json.close
+
+    assert_equal nil, parsed.fetch("empty")
+    assert_equal 1, parsed.fetch("value")
+    assert_equal false, parsed["first_value"]
+  end
 end

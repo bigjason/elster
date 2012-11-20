@@ -26,21 +26,21 @@ module Elster
     #
     # Example:
     #
-    #   json.key(:mistake, "HUGE!")
+    #    json.key(:mistake, "HUGE!")
     #
-    #   { "mistake" : "HUGE!" }
-    #
-    #
-    #   json.key(:mistake) do
-    #     json.key(:type, "HUGE!")
-    #   end
-    #
-    #   { "mistake" : { "type" : "HUGE!" } }
+    #    { "mistake" : "HUGE!" }
     #
     #
-    #   json.key(:mistake) do
-    #     json.add("HUGE!")
-    #   end
+    #    json.key(:mistake) do
+    #      json.key(:type, "HUGE!")
+    #    end
+    #
+    #    { "mistake" : { "type" : "HUGE!" } }
+    #
+    #
+    #    json.key(:mistake) do
+    #      json.add("HUGE!")
+    #    end
     #
     #   { "mistake" : [ "HUGE!" ] }
     def key(key, value=nil, &block)
@@ -59,14 +59,11 @@ module Elster
       write ":"
 
       if block
-        nest_in
-        block.call
-        nest_out
+        call_block(block)
       else
         write encode_value(value)
+        @item_count += 1
       end
-
-      @item_count += 1
     end
 
     # Output an array. If a block is passes the `value` will be ignored and a nested value
@@ -98,14 +95,11 @@ module Elster
       end
 
       if block
-        nest_in
-        block.call
-        nest_out
+        call_block(block)
       else
         write encode_value(value)
+        @item_count += 1
       end
-
-      @item_count += 1
     end
 
     protected
@@ -186,6 +180,23 @@ module Elster
         write("]")
       else
         write("}")
+      end
+    end
+
+    def call_block(block)
+      nest_in
+      begin
+        block.call
+      rescue
+        raise
+      ensure
+        if @item_count == 0
+          write encode_value(nil)
+          @item_count += 1
+        else
+          nest_out
+          @item_count += 1
+        end
       end
     end
   end

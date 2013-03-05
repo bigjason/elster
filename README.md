@@ -34,6 +34,20 @@ puts output.string
 # {"name":"George","kids":["Job","Buster"]}
 ```
 
+### With Rails
+
+You can use Elster with rails by naming templates with the `.json.elster`
+extension.  When used as a rails template simply reference the implicit `json`
+object.  For example:
+
+``` ruby
+json.key(:name, "George")
+json.key(:kids) do
+  json.add("Job")
+  json.add("Buster")
+end
+```
+
 ## Contributing
 
 1. Fork it

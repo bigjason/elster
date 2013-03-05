@@ -192,6 +192,21 @@ class StreamerTest < MiniTest::Unit::TestCase
     assert_equal expected, parsed["chars"]
   end
 
+  def test_encode_html
+    expected = %Q{
+      <html>
+      <body>
+        <h1>Hello</h1>
+        <p>I am the body; right here</p>
+      </body>
+      </html>
+    }
+    json.key("html", expected)
+    json.close
+
+    assert_equal expected, parsed["html"]
+  end
+
   def test_no_key_in_arrays
     json.add(1)
     assert_raises(Elster::JsonContainerTypeError) do

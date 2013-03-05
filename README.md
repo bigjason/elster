@@ -1,5 +1,7 @@
 # Elster
 
+[![Build Status](https://travis-ci.org/[bigjason]/[elster].png)](https://travis-ci.org/[bigjason]/[elster])
+
 Elster is a streaming JSON encoder written in pure ruby.
 
 ## Installation

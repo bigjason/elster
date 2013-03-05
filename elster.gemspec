@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{A simple streaming JSON encoder.}
   gem.homepage      = "https://github.com/bigjason/elster"
 
-  gem.files         = Dir["#{File.dirname(__FILE__)}/**/*"]
+  gem.files         = Dir.glob("{bin,lib,test}/**/*") + %w(LICENSE README.md Rakefile)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "elster"

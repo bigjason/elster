@@ -2,7 +2,16 @@
 
 [![Build Status](https://travis-ci.org/bigjason/elster.png)](https://travis-ci.org/bigjason/elster)
 
-Elster is a streaming JSON encoder written in pure ruby.
+Elster is a streaming JSON encoder written in pure ruby.  There were 2 main
+requirements when I set out to write Elster:
+
+1. The JSON data must be streamed with no caching whatsoever.
+2. No DSL in the core API.
+
+**Streaming Status with Rails:** I am working on figuring out how to use streaming
+with Rails.  Currently the [Rails Streaming API](http://api.rubyonrails.org/classes/ActionController/Streaming.html)
+doesn't allow this, but I hope to get together something to make it work.
+
 
 ## Installation
 
